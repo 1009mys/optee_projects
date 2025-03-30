@@ -1,0 +1,4 @@
+#define MAX_LAYERS 32
+#define MAX_TENSOR_SIZE 1048576
+
+#define MAX_DIMS 8

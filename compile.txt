@@ -1,0 +1,11 @@
+
+
+ta
+make CROSS_COMPILE=aarch64-linux-gnu- TEEC_EXPORT=/tmp/optee_client/ TA_DEV_KIT_DIR=~/Project/op-tee/op-tee-package/optee_os/out/arm/export-ta_arm64/  --no-builtin-variables
+
+host
+make CROSS_COMPILE=aarch64-linux-gnu- TEEC_EXPORT=/tmp/optee_client/ --no-builtin-variables
+
+cd optee_client/build/
+cmake -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_INSTALL_PREFIX=/tmp/optee_client ..
+make install
