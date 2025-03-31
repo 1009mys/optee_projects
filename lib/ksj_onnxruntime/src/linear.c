@@ -18,17 +18,17 @@ void linear_noBatch(const float *input, const Layer *layer, float *output) {
         bias    : [layer->output_size]
         output  : [layer->output_size]
     */
-    for (uint32_t i = 0; i < layer->output_size; ++i) {
+    for (uint32_t i = 0; i < layer->output_size[1]; ++i) {
         float sum = layer->bias[i];
-        for (uint32_t j = 0; j < layer->input_size; ++j) {
-            sum += layer->weights[i * layer->input_size + j] * input[j];
+        for (uint32_t j = 0; j < layer->input_size[1]; ++j) {
+            sum += layer->weights[i * layer->input_size[1] + j] * input[j];
         }
         output[i] = sum;
     }
 }
 
 
-void linear(const float *input, const Layer *layer, float *output, uint32_t batch_size) {
+void linear(const float *input, const Layer *layer, float *output) {
     /*
     description:
         computes the output of a linear layer
@@ -40,7 +40,7 @@ void linear(const float *input, const Layer *layer, float *output, uint32_t batc
         bias    : [layer->output_size]
         output  : [batch_size, layer->output_size]
     */
-    for (uint32_t i = 0; i < batch_size; ++i) {
-        linear_noBatch(input + i * layer->input_size, layer, output + i * layer->output_size);
+    for (uint32_t i = 0; i < layer->input_size[0]; ++i) {
+        linear_noBatch(input + i * layer->input_size[1], layer, output + i * layer->output_size[1]);
     }
 }

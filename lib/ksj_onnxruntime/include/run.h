@@ -19,10 +19,10 @@ static void run(const Model* model, const Tensor* input, Tensor* output, uint32_
         const Layer* layer = model->layers[i];
         switch (layer->type) {
             case LAYER_LINEAR:
-                linear(cur_in, layer, cur_out, batch_size);
+                linear(cur_in, layer, cur_out);
                 break;
             case LAYER_RELU:
-                relu(cur_in, layer, cur_out, batch_size);
+                relu(cur_in, layer, cur_out);
                 break;
             default:
                 return;

@@ -7,6 +7,8 @@
 #include "Tensor.h"
 #include "parson.h"
 
+#include "onnxruntime_c_api.h"
+
 
 const int BatchSize = 4;
 
@@ -32,7 +34,7 @@ void read_layer(const char* txtFile_weight, const char* txtFile_bias, Layer* lay
         printf("Error: Could not open file %s\n", txtFile_weight);
         exit(1);
     }
-    for (int i = 0; i < layer->output_size * layer->input_size; i++) {
+    for (int i = 0; i < layer->output_size[1] * layer->input_size[1]; i++) {
         fscanf(file_weight, "%f", &layer->weights[i]);
     }
     fclose(file_weight);
@@ -43,7 +45,7 @@ void read_layer(const char* txtFile_weight, const char* txtFile_bias, Layer* lay
         printf("Error: Could not open file %s\n", txtFile_bias);
         exit(1);
     }
-    for (int i = 0; i < layer->output_size; i++) {
+    for (int i = 0; i < layer->output_size[1]; i++) {
         fscanf(file_bias, "%f", &layer->bias[i]);
     }
     fclose(file_bias);
@@ -53,17 +55,17 @@ void load_model(Model* model, const char* modelPath)
 {
     // read layer list from json file
 
-    const char* layerList = "layer_list.json";
+    // const char* layerList = "layer_list.json";
+    const char* layerList = "layer_options.json";
     // modelPath와 합쳐라
     strcat (modelPath, layerList);
     printf("modelPath: %s\n", modelPath);
     
-    JSON_Value* root_value = json_parse_file(layerList);
-    JSON_Object* root_object = json_value_get_object(root_value);
-    JSON_Array* layers = json_object_get_array(root_object, "layers");
+    JSON_Value* root_value = json_parse_file(modelPath);
+    JSON_Array* layers_array = json_value_get_array(root_value);
 
-    printf("layers: %p\n", layers);
-
+    int size = json_array_get_count(layers_array);
+    printf("num_layers: %d\n", size);
 
 }
 
@@ -76,6 +78,7 @@ void test_AlexNet()
     Model* model = (Model*)malloc(sizeof(Model));
     char* modelPath = (char*)malloc(200 * sizeof(char));
     strcpy(modelPath, "../../testcases/alexnet/");
+    printf("modelPath: %s\n", modelPath);
     load_model(model, modelPath);
 
 
@@ -85,9 +88,24 @@ void test_AlexNet()
     free(modelPath);
 }
 
-int main()
+int main3()
 {
-    test_AlexNet();
+    OrtEnv* env;
+    OrtStatus* status;
+    const OrtApi* g_ort = OrtGetApiBase()->GetApi(ORT_API_VERSION);
+
+    status = g_ort->CreateEnv(ORT_LOGGING_LEVEL_WARNING, "test", &env);
+    if (status != NULL) {
+        printf("Failed to create OrtEnv.\n");
+        return -1;
+    }
+
+    // print version
+    const char* version = OrtGetApiBase()->GetVersionString();
+    printf("ONNX Runtime version: %s\n", version);
+
+
+
     return 0;
 }
 
@@ -98,25 +116,31 @@ int main2()
     input_random_1->dims[1] = 10;
     input_random_1->data = (float*)malloc(10 * BatchSize * sizeof(float));
     input_random_1->size = 10 * BatchSize;
-    read_tensor("../../testcases/input_tensor_random_1.txt", input_random_1);
+    read_tensor("../../testcases/linear/input_tensor_random_1.txt", input_random_1);
 
     Model* model = (Model*)malloc(sizeof(Model));
     model->num_layers = 2;
 
     Layer* layer1 = (Layer*)malloc(sizeof(Layer));
     layer1->type = LAYER_LINEAR;
-    layer1->input_size = 10;
-    layer1->output_size = 6;
+    layer1->input_size[0] = BatchSize;
+    layer1->input_size[1] = 10;
+    layer1->output_size[0] = BatchSize;
+    layer1->output_size[1] = 6;
     layer1->weights = (float*)malloc(10 * 6 * sizeof(float));
     layer1->bias = (float*)malloc(6 * sizeof(float));
-    read_layer("../../testcases/model_weights.txt", "../../testcases/model_bias.txt", layer1);
+    read_layer("../../testcases/linear/model_weights.txt", "../../testcases/linear/model_bias.txt", layer1);
 
     Layer* layer2 = (Layer*)malloc(sizeof(Layer));
     layer2->type = LAYER_RELU;
-    layer2->input_size = 6;
-    layer2->output_size = 6;
+    layer2->input_size[0] = BatchSize;
+    layer2->input_size[1] = 6;
+    layer2->output_size[0] = BatchSize;
+    layer2->output_size[1] = 6;
     layer2->weights = NULL;
     layer2->bias = NULL;
+
+    layer2->conv2d.kernel_size = 0;
     
     model->layers[0] = layer1;
     model->layers[1] = layer2;

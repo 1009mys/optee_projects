@@ -13,12 +13,12 @@ void relu_noBatch(const float* input, const Layer* layer, float* output) {
         input   : [layer->input_size]
         output  : [layer->input_size]
     */
-    for (uint32_t i = 0; i < layer->input_size; ++i) {
+    for (uint32_t i = 0; i < layer->input_size[1]; ++i) {
         output[i] = input[i] > 0.0f ? input[i] : 0.0f;
     }
 }
 
-void relu(const float* input, const Layer* layer, float* output, uint32_t batch_size) {
+void relu(const float* input, const Layer* layer, float* output) {
     /*
     description:
         computes the output of a ReLU layer
@@ -28,7 +28,7 @@ void relu(const float* input, const Layer* layer, float* output, uint32_t batch_
         input   : [batch_size, layer->input_size]
         output  : [batch_size, layer->input_size]
     */
-    for (uint32_t i = 0; i < batch_size * layer->input_size; ++i) {
+    for (uint32_t i = 0; i < layer->input_size[0] * layer->input_size[1]; ++i) {
         output[i] = input[i] > 0.0f ? input[i] : 0.0f;
     }
 }
