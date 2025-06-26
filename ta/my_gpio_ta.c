@@ -10,7 +10,7 @@
 
 #include "include/my_gpio_ta.h"
 
-#include "onnxruntime/core/session/onnxruntime_cxx_api.h"
+//#include "onnxruntime/core/session/onnxruntime_cxx_api.h"
 
 // Raspberry Pi 3의 Peripheral base 주소 (BCM2837)
 #define BCM2837_PERI_BASE 0x3F000000

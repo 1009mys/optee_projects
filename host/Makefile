@@ -8,13 +8,13 @@ READELF ?= $(CROSS_COMPILE)readelf
 
 OBJDIR  := build
 OBJS    := $(OBJDIR)/main.o
-CXXFLAGS+= -Wall -O0 -g -std=c++17 -I../ta/include -I$(TEEC_EXPORT)/include 
-CXXFLAGS+= -I./include -I/home/a1009mys/Project/onnxruntime/include/
+CXXFLAGS+= -Wall -O0 -g -std=c++17 -I../ta/include -I$(TEEC_EXPORT)/include  -I/home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib
+CXXFLAGS+= -I./include -I/home/a1009mys/Project/onnxruntime/include/ -I/home/a1009mys/Project/onnxruntime/include/onnxruntime/core/session/
 LDADD   += -lteec -L$(TEEC_EXPORT)/lib -L/home/a1009mys/Project/onnxruntime/build/Linux/RelWithDebInfo 
-LDADD   += -lonnxruntime
+LDADD   += -lonnxruntime /home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib/ksj_onnxruntime/build
 
 
-BINARY  := $(OBJDIR)/optee_my_gpio
+BINARY  := $(OBJDIR)/optee_my_app
 
 .PHONY: all
 all: $(BINARY)

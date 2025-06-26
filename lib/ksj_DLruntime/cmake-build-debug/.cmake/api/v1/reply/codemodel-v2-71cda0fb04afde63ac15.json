@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.30"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "ksj_DLruntime",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ksj_DLruntime::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ksj_DLruntime-Debug-375a0dcb597e64130c83.json",
+					"name" : "ksj_DLruntime",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib/ksj_DLruntime/cmake-build-debug",
+		"source" : "/home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib/ksj_DLruntime"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

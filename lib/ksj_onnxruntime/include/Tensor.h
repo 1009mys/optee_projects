@@ -9,6 +9,9 @@ typedef struct Tensor_{
     uint32_t size;
     int dims[MAX_DIMS];
     int dims_size;
+    uint8_t tensor_dim_type;
+        // 0: NCHW
+        // 1: NHWC
     void (*new_tensor)(struct Tensor_*, int*, uint32_t);
     void (*delete_tensor)(struct Tensor_*);
     void (*set)(struct Tensor_*, uint32_t*, float*);
@@ -17,8 +20,10 @@ typedef struct Tensor_{
 
 void new_tensor(Tensor* tensor, int* dims, uint32_t dims_size);
 
-void delete_tensor(Tensor* tensor);
+void delete_tensor(Tensor* this);
 
 void set(Tensor* this, uint32_t* indices, float* value);
 
 float get(Tensor* this, uint32_t* indices);
+
+void convert_from_NCHW_to_NHWC(Tensor* this);

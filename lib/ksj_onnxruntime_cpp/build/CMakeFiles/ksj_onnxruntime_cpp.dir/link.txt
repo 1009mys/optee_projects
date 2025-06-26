@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 CMakeFiles/ksj_onnxruntime_cpp.dir/src/main.cpp.o CMakeFiles/ksj_onnxruntime_cpp.dir/src/inference.cpp.o -o ksj_onnxruntime_cpp

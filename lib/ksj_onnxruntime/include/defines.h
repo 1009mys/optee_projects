@@ -1,4 +1,18 @@
 #define MAX_LAYERS 32
 #define MAX_TENSOR_SIZE 1048576
+#define MAX_INPUT_OUTPUT_NUM 4
 
-#define MAX_DIMS 8
+#define MAX_DIMS 4
+
+// use int8
+#define PADDING_MODE_ZEROES 0
+#define PADDING_MODE_REFLECT 1
+#define PADDING_MODE_REPLICATE 2
+#define PADDING_MODE_CIRCULAR 3
+
+#define NCHW 0
+#define NHWC 1
+
+#define MAX_INPUTS 8
+#define MAX_OUTPUTS 8
+

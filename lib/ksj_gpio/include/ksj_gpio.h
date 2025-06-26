@@ -7,6 +7,9 @@
 #define LOW 0
 #define HIGH 1
 
+// 0x7E200000 - 0x7E000000 + 0x3F000000 = 0x3F200000
+// 0x7E200000 : 문서 상의 rpi3 gpio base 주소
+// 0x7E000000 : 문서 상의 rpi3 peripheral base 주소
 // Raspberry Pi 3의 Peripheral base 주소 (BCM2837)
 #define BCM2837_PERI_BASE 0x3F000000
 // GPIO 레지스터의 base 주소 (오프셋 0x200000)

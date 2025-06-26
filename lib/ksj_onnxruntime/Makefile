@@ -29,9 +29,10 @@ CPP_OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(CPP_SRCS))
 OBJECTS = $(C_OBJS) $(CPP_OBJS)
 DEPS    = $(OBJECTS:.o=.d)
 
-CFLAGS = -I$(INCLUDE)   -g -O0 # -Wall  -Werror -Wextra 
-CXXFLAGS = -I$(INCLUDE) -g -O0 # -Wall  -Werror -Wextra
-LDFLAGS = -L/home/a1009mys/onnx_lib/onnxruntime-linux-x64-1.21.0/lib/ -lonnxruntime -l
+CFLAGS = -I$(INCLUDE)   -g -O0 # -fsanitize=address -Wall  -Werror -Wextra 
+CFLAGS += -D__ARM_NEON__
+CXXFLAGS = -I$(INCLUDE) -g -O0 # -fsanitize=address -Wall  -Werror -Wextra
+LDFLAGS = #-L/home/a1009mys/onnx_lib/onnxruntime-linux-x64-1.21.0/lib/ -lonnxruntime
 
 all: $(TARGET)
 
@@ -45,7 +46,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
 
 dll:
-	$(CC) -shared -fPIC $(CFLAGS) $(SRCS) -o $(BUILD_DIR)/libmy_gpio.so
+	$(CC) -shared -fPIC $(CFLAGS) $(C_SRCS) -o $(BUILD_DIR)/libmy_gpio.so
 
 .PHONY: clean all
 clean:

@@ -1,0 +1,3 @@
+/home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib/ksj_DLruntime/cmake-build-debug/CMakeFiles/ksj_DLruntime.dir
+/home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib/ksj_DLruntime/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib/ksj_DLruntime/cmake-build-debug/CMakeFiles/rebuild_cache.dir

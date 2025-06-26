@@ -1,0 +1,3 @@
+/home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib/ksj_onnxruntime_cpp/build/CMakeFiles/ksj_onnxruntime_cpp.dir
+/home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib/ksj_onnxruntime_cpp/build/CMakeFiles/edit_cache.dir
+/home/a1009mys/Project/op-tee/op-tee-package/optee_project/optee_my_gpio/lib/ksj_onnxruntime_cpp/build/CMakeFiles/rebuild_cache.dir

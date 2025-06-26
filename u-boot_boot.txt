@@ -1,0 +1,6 @@
+U-Boot> setenv fdtdevice mmc 0:1
+U-Boot> setenv fdtfile bcm2710-rpi-3-b-plus.dtb
+U-Boot> setenv loadaddr 0x01000000
+U-Boot> load ${fdtdevice} ${loadaddr} ${fdtfile}
+U-Boot> fdt addr ${loadaddr}
+U-Boot> boot192.168.0.28

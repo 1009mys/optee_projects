@@ -27,8 +27,106 @@ class LinearModel(nn.Module):
         x = F.relu(x)
         return x
     
+class LinearModel3(nn.Module):
+    def __init__(self, input_dim, middle_dim, output_dim):
+        super(LinearModel3, self).__init__()
+        self.linear1 = nn.Linear(input_dim, middle_dim)
+        self.linear2 = nn.Linear(middle_dim, middle_dim)
+        self.linear3 = nn.Linear(middle_dim, output_dim)
 
-def generate_testcase_linear(testcases_dir = "./testcases/linear"):
+        
+
+    def forward(self, x):
+        x = self.linear1(x)
+        x = F.relu(x)
+        x = self.linear2(x)
+        x = F.relu(x)
+        x = self.linear3(x)
+        x = F.relu(x)
+        #x = F.softmax(x, dim=1)
+        return x
+
+def generate_testcase_linear3(testcases_dir = "./testcases/linear3/"):
+    if not os.path.exists(testcases_dir):
+        os.makedirs(testcases_dir)
+
+    # Define the input and output dimension
+    input_dim = 10
+    middle_dim = 8
+    output_dim = 6
+    model = LinearModel3(input_dim, middle_dim, output_dim)
+    model.eval()
+
+    batch_size = 4
+    
+    # Define the random input tensor 
+    input_tensor_random_1 = torch.randn(batch_size, input_dim)
+    input_tensor_random_2 = torch.randn(batch_size, input_dim)
+    input_tensor_random_3 = torch.randn(batch_size, input_dim)
+
+    # Define the input tensor with all zeros
+    input_tensor_zeros = torch.zeros(batch_size, input_dim)
+
+    # Define the input tensor with all ones
+    input_tensor_ones = torch.ones(batch_size, input_dim)
+    
+    # Export the model
+    output_random_1 = model(input_tensor_random_1)
+    output_random_2 = model(input_tensor_random_2)
+    output_random_3 = model(input_tensor_random_3)
+    output_zeros = model(input_tensor_zeros)
+    output_ones = model(input_tensor_ones)
+
+    print("input_tensor_random_1: ", input_tensor_random_1)
+    print("output_random_1: ", output_random_1)
+    print("input_tensor_random_2: ", input_tensor_random_2)
+    print("output_random_2: ", output_random_2)
+    print("input_tensor_random_3: ", input_tensor_random_3)
+    print("output_random_3: ", output_random_3)
+    print("input_tensor_zeros: ", input_tensor_zeros)
+    print("output_zeros: ", output_zeros)
+    print("input_tensor_ones: ", input_tensor_ones)
+    print("output_ones: ", output_ones)
+
+    
+    # save tensors to txt files
+    np.savetxt(testcases_dir + "input_tensor_random_1.txt", input_tensor_random_1.numpy())
+    np.savetxt(testcases_dir + "output_random_1.txt", output_random_1.detach().numpy())
+    np.savetxt(testcases_dir + "input_tensor_random_2.txt", input_tensor_random_2.numpy())
+    np.savetxt(testcases_dir + "output_random_2.txt", output_random_2.detach().numpy())
+    np.savetxt(testcases_dir + "input_tensor_random_3.txt", input_tensor_random_3.numpy())
+    np.savetxt(testcases_dir + "output_random_3.txt", output_random_3.detach().numpy())
+    np.savetxt(testcases_dir + "input_tensor_zeros.txt", input_tensor_zeros.numpy())
+    np.savetxt(testcases_dir + "output_zeros.txt", output_zeros.detach().numpy())
+    np.savetxt(testcases_dir + "input_tensor_ones.txt", input_tensor_ones.numpy())
+    np.savetxt(testcases_dir + "output_ones.txt", output_ones.detach().numpy())
+    # print model weights
+    print("model weights: ", model.linear1.weight)
+    print("model bias: ", model.linear1.bias)
+    print("model weights: ", model.linear2.weight)
+    print("model bias: ", model.linear2.bias)
+    print("model weights: ", model.linear3.weight)
+    print("model bias: ", model.linear3.bias)
+    # save model weights
+    np.savetxt(testcases_dir + "model_weights_linear1.txt", model.linear1.weight.detach().numpy())
+    np.savetxt(testcases_dir + "model_bias_linear1.txt", model.linear1.bias.detach().numpy())
+    np.savetxt(testcases_dir + "model_weights_linear2.txt", model.linear2.weight.detach().numpy())
+    np.savetxt(testcases_dir + "model_bias_linear2.txt", model.linear2.bias.detach().numpy())
+    np.savetxt(testcases_dir + "model_weights_linear3.txt", model.linear3.weight.detach().numpy())
+    np.savetxt(testcases_dir + "model_bias_linear3.txt", model.linear3.bias.detach().numpy())
+
+class CNNLayer(nn.Module):
+    def __init__(self, in_channels, out_channels, kernel_size=3, stride=1, padding=1):
+        super(CNNLayer, self).__init__()
+        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding)
+        self.bn = nn.BatchNorm2d(out_channels)
+        self.relu = nn.ReLU(inplace=True)
+    
+
+def generate_testcase_linear(testcases_dir = "./testcases/linear/"):
+    if not os.path.exists(testcases_dir):
+        os.makedirs(testcases_dir)
+
     # Define the input and output dimension
     input_dim = 10
     output_dim = 6
@@ -192,6 +290,7 @@ def generate_testcase_Alexnet(testcases_dir = "./testcases/alexnet/"):
 
 
 
+
     # save tensors to txt files
     # change dimension to 1D
     input_tensor_random_1 = input_tensor_random_1.view(-1)
@@ -228,31 +327,66 @@ def generate_testcase_Alexnet(testcases_dir = "./testcases/alexnet/"):
             print("layer bias: ", layer.bias)
     """
 
-    # save model weights of all layers with layer number
+    # save model weights of all layers with layer number not just conv2d
     layer_num = 0
     for layer in model.features:
         if isinstance(layer, nn.Conv2d):
-            np.savetxt(testcases_dir + "layer" + str(layer_num) + "_weight.txt", layer.weight.view(-1).detach().numpy())
-            np.savetxt(testcases_dir + "layer" + str(layer_num) + "_bias.txt", layer.bias.view(-1).detach().numpy())
+            np.savetxt(testcases_dir + "layer_" + str(layer_num) + "_weight.txt", layer.weight.view(-1).detach().numpy())
+            np.savetxt(testcases_dir + "layer_" + str(layer_num) + "_bias.txt", layer.bias.view(-1).detach().numpy())
             layer_num += 1
+        if isinstance(layer, nn.ReLU):
+            continue
+        if isinstance(layer, nn.MaxPool2d):
+            continue
     for layer in model.classifier:
         if isinstance(layer, nn.Linear):
-            np.savetxt(testcases_dir + "layer" + str(layer_num) + "_weight.txt", layer.weight.view(-1).detach().numpy())
-            np.savetxt(testcases_dir + "layer" + str(layer_num) + "_bias.txt", layer.bias.view(-1).detach().numpy())
+            np.savetxt(testcases_dir + "layer_" + str(layer_num) + "_weight.txt", layer.weight.view(-1).detach().numpy())
+            np.savetxt(testcases_dir + "layer_" + str(layer_num) + "_bias.txt", layer.bias.view(-1).detach().numpy())
             layer_num += 1
-    """
-    for i, layer in enumerate(model.features):
-        if isinstance(layer, nn.Conv2d):
-            np.savetxt(testcases_dir + "model_features_" + str(i) + "_weight.txt", layer.weight.view(-1).detach().numpy())
-            np.savetxt(testcases_dir + "model_features_" + str(i) + "_bias.txt", layer.bias.detach().numpy())
-    for i, layer in enumerate(model.classifier):
-        if isinstance(layer, nn.Linear):
-            np.savetxt(testcases_dir + "model_classifier_" + str(i) + "_weight.txt", layer.weight.view(-1).detach().numpy())
-            np.savetxt(testcases_dir + "model_classifier_" + str(i) + "_bias.txt", layer.bias.detach().numpy())
-    """
+        if isinstance(layer, nn.ReLU):
+            continue
+        if isinstance(layer, nn.Dropout):
+            continue
     
+    # print model weights dimension
+    print("model weights dimension: ")
+    for layer in model.features:
+        if isinstance(layer, nn.Conv2d):
+            print("layer weight dimension: ", layer.weight.size())
+            print("layer bias dimension: ", layer.bias.size())
+    for layer in model.classifier:
+        if isinstance(layer, nn.Linear):
+            print("layer weight dimension: ", layer.weight.size())
+            print("layer bias dimension: ", layer.bias.size())
+    # save model weights dimension
+    with open(testcases_dir + "model_weights_dimension.json", "w") as f:
+        model_weights_dimension = {}
+        for layer in model.features:
+            if isinstance(layer, nn.Conv2d):
+                model_weights_dimension["layer_" + str(layer_num) + "_weight"] = list(layer.weight.size())
+                model_weights_dimension["layer_" + str(layer_num) + "_bias"] = list(layer.bias.size())
+                layer_num += 1
+            if isinstance(layer, nn.ReLU):
+                continue
+            if isinstance(layer, nn.MaxPool2d):
+                continue
+        for layer in model.classifier:
+            if isinstance(layer, nn.Linear):
+                model_weights_dimension["layer_" + str(layer_num) + "_weight"] = list(layer.weight.size())
+                model_weights_dimension["layer_" + str(layer_num) + "_bias"] = list(layer.bias.size())
+                layer_num += 1
+            if isinstance(layer, nn.ReLU):
+                continue
+            if isinstance(layer, nn.Dropout):
+                continue
+        json.dump(model_weights_dimension, f)
+    # save model weights dimension
+
+
+
 
 
 if __name__ == '__main__':
     #generate_testcase_linear()
-    generate_testcase_Alexnet()
+    generate_testcase_linear3()
+    #generate_testcase_Alexnet()

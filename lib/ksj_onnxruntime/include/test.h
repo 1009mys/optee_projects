@@ -16,3 +16,5 @@ void test_AlexNet();
 
 int main2();
 int main3();
+
+int test_multi_linear3();
